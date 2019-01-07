@@ -21,10 +21,26 @@ class ProfitService extends BaseService
     }
 
     /**
-     * @return int
+     * @return float
      * @throws \Doctrine\ORM\ORMException
      */
-    public function getTotalProfit(): int
+    public function getTotalTurnover(): float
+    {
+        $profit = $this->getResult($this->repository->createAll());
+        $totalTurnover = 0;
+
+        for($a = 0; $a < count($profit); $a++) {
+            $totalTurnover += $profit[$a]->getTurnover();
+        }
+
+        return $totalTurnover;
+    }
+
+    /**
+     * @return float
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function getTotalProfit(): float
     {
         $profit = $this->getResult($this->repository->createAll());
         $totalProfit = 0;

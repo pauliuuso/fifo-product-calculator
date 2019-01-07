@@ -7,7 +7,6 @@ use App\Entity\Profit;
 use App\Service\Traits\RepositoryResultsTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -84,6 +83,7 @@ class ProductService extends BaseService
         $products = $this->getAll();
         $productCount = 0;
         $saleValue = 0;
+        $profitValue = 0;
 
         for($a = 0; $a < count($products); $a++) {
             $productCount += $products[$a]->getCount();
@@ -99,7 +99,10 @@ class ProductService extends BaseService
                 $currentProduct = $products[$b];
 
                 if($currentProduct->getCount() >= $sellCount) {
+
                     $saleValue += $sellCount * $sellPrice;
+                    $profitValue += $sellCount * ($sellPrice - $currentProduct->getPrice());
+
                     $currentProduct->setCount($currentProduct->getCount() - $sellCount);
 
                     if($currentProduct->getCount() > 0) {
@@ -110,14 +113,16 @@ class ProductService extends BaseService
                     }
 
                     $profit = new Profit();
-                    $profit->setProfit($saleValue);
+                    $profit->setTurnover($saleValue);
+                    $profit->setProfit($profitValue);
                     $this->profitService->create($profit);
 
                     $this->flashBag->add('notice', $this->translator->trans('product.sold'));
                     return true;
                 }
                 else {
-                    $saleValue += $currentProduct->getCount() * ($sellPrice - $currentProduct->getPrice());
+                    $saleValue += $currentProduct->getCount() * $sellPrice;
+                    $profitValue += $currentProduct->getCount() * ($sellPrice - $currentProduct->getPrice());
                     $sellCount -= $currentProduct->getCount();
                     $this->remove($currentProduct);
                 }

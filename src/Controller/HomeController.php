@@ -34,10 +34,12 @@ class HomeController extends Controller
     public function index(ProductService $productService, ProfitService $profitService)
     {
         $products = $productService->getAll();
+        $totalTurnover = $profitService->getTotalTurnover();
         $totalProfit = $profitService->getTotalProfit();
 
         return $this->render('home.html.twig', [
             'products' => $products,
+            'totalTurnover' => $totalTurnover,
             'totalProfit' => $totalProfit
         ]);
     }
@@ -52,6 +54,7 @@ class HomeController extends Controller
      *
      * @return Response
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
      */
     public function buy(
         Request $request,
@@ -62,6 +65,7 @@ class HomeController extends Controller
     {
         $product = new Product();
         $products = $productService->getAll();
+        $totalTurnover = $profitService->getTotalTurnover();
         $totalProfit = $profitService->getTotalProfit();
 
         $buyForm = $this->createForm(BuyType::class, $product);
@@ -72,11 +76,7 @@ class HomeController extends Controller
             $product->setCreatedAt(new \DateTime('now'));
             $productService->create($product);
 
-            $buyCount = (int) $buyForm->get('count')->getData();
-            $buyPrice = (float) $buyForm->get('price')->getData();
-
             $profit = new Profit();
-            $profit->setProfit(-$buyCount * $buyPrice);
             $profitService->create($profit);
 
             $this->addFlash('notice', $translator->trans('product.bought'));
@@ -87,6 +87,7 @@ class HomeController extends Controller
         return $this->render('buy.html.twig', [
             'buyForm' => $buyForm->createView(),
             'products' => $products,
+            'totalTurnover' => $totalTurnover,
             'totalProfit' => $totalProfit
         ]);
     }
@@ -109,6 +110,7 @@ class HomeController extends Controller
     )
     {
         $products = $productService->getAll();
+        $totalTurnover = $profitService->getTotalTurnover();
         $totalProfit = $profitService->getTotalProfit();
 
         $sellForm = $this->createForm(SellType::class);
@@ -131,6 +133,7 @@ class HomeController extends Controller
         return $this->render('sell.html.twig', [
             'sellForm' => $sellForm->createView(),
             'products' => $products,
+            'totalTurnover' => $totalTurnover,
             'totalProfit' => $totalProfit
         ]);
     }

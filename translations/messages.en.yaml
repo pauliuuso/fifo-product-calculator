@@ -4,6 +4,7 @@ home:
   sell_products: Sell products
   buy_products: Buy products
   total_profit: Total profit
+  total_turnover: Total turnover
   back_to_home: Back to home
 
 product:

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
 
-            {% include 'inc/inventory.html.twig' with {'totalProfit': totalProfit, 'products': products} %}
+            {% include 'inc/inventory.html.twig' with {'totalTurnover': totalTurnover, 'totalProfit': totalProfit, 'products': products} %}
 
             <a class="btn btn-primary mt-5 pl-5 pr-5" href="{{ path('buy') }}">{{ 'home.buy_products'|trans }}</a>
             <a class="btn btn-primary mt-5 pl-5 pr-5" href="{{ path('sell') }}">{{ 'home.sell_products'|trans }}</a>

@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,19 +39,19 @@ class BuyType extends AbstractType
                     ])
                 ]
             ])
-            ->add('count', TextType::class, [
+            ->add('count', IntegerType::class, [
                 'label' => 'product.count',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'generic.not_blank'
                     ]),
                     new Type([
-                        'type' => 'numeric',
-                        'message' => 'generic.numeric'
+                        'type' => 'int',
+                        'message' => 'generic.integer'
                     ])
                 ]
             ])
-            ->add('price', TextType::class, [
+            ->add('price', NumberType::class, [
                 'label' => 'product.price',
                 'constraints' => [
                     new NotBlank([

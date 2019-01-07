@@ -17,7 +17,12 @@ class Profit
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $turnover;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
      */
     private $profit;
 
@@ -30,21 +35,41 @@ class Profit
     }
 
     /**
-     * @return int|null
+     * @return float|null
      */
-    public function getProfit(): ?int
+    public function getProfit(): ?float
     {
         return $this->profit;
     }
 
     /**
-     * @param int $profit
+     * @param float $profit
      *
      * @return Profit
      */
-    public function setProfit(int $profit): self
+    public function setProfit(float $profit): self
     {
         $this->profit = $profit;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTurnover(): ?float
+    {
+        return $this->turnover;
+    }
+
+    /**
+     * @param float $turnover
+     *
+     * @return Profit
+     */
+    public function setTurnover(float $turnover): self
+    {
+        $this->turnover = $turnover;
 
         return $this;
     }

@@ -25,7 +25,7 @@ class Product
     private $title;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $price;
 
@@ -63,19 +63,19 @@ class Product
     }
 
     /**
-     * @return int|null
+     * @return float|null
      */
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
     /**
-     * @param int $price
+     * @param float $price
      *
      * @return Product
      */
-    public function setPrice(int $price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
