@@ -1,2 +1,9 @@
 home:
   title: FIFO calculator
+  purchase_price: Purchase price
+
+product:
+  title: Product title
+  price: Price
+  count: Quantity
+  bought: Successfully bought!

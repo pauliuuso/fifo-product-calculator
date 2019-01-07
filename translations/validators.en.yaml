@@ -1,0 +1,2 @@
+generic:
+  not_blank: This field must be filled!
