@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="format-detection" content="telephone=no">
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        {% endblock %}
+        <title>{% block title %}{{ 'home.title'|trans }}{% endblock %}</title>
+    </head>
+    <body>
+
+        <div class="container">
+
+            {% block header %}
+                {% include('header.html.twig') %}
+            {% endblock header %}
+
+            {% block body %}
+            {% endblock %}
+
+            {% block javascripts %}
+            {% endblock %}
+
+        </div>
+
+        <script src="{{ asset('build/app.js') }}"></script>
+
+    </body>
+</html>
