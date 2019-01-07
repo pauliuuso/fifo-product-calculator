@@ -1,0 +1,14 @@
+<table class="table table-striped mt-4 mb-4">
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <th>
+                    <span class="font-weight-normal">{{ product.title }} <b>x{{ product.count }}</b> {{ 'home.purchase_price'|trans }} <b>({{ product.price }} eur)</b> {{ product.createdAt }}</span>
+                </th>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<p class="mb-5">{{ 'home.total_profit'|trans }}: <b>{{ totalProfit }} eur</b></p>

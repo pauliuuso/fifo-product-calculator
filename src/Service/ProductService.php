@@ -3,7 +3,13 @@
 namespace App\Service;
 
 use App\Entity\Product;
+use App\Entity\Profit;
 use App\Service\Traits\RepositoryResultsTrait;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ProductService
@@ -11,6 +17,34 @@ use App\Service\Traits\RepositoryResultsTrait;
 class ProductService extends BaseService
 {
     use RepositoryResultsTrait;
+
+    private $translator;
+    private $profitService;
+    private $flashBag;
+
+    /**
+     * ProductService constructor.
+     *
+     * @param EntityManagerInterface   $em
+     * @param EventDispatcherInterface $dispatcher
+     * @param TranslatorInterface      $translator
+     * @param ProfitService            $profitService
+     * @param FlashBagInterface        $flashBag
+     */
+    public function __construct(
+        EntityManagerInterface $em,
+        EventDispatcherInterface $dispatcher,
+        TranslatorInterface $translator,
+        ProfitService $profitService,
+        FlashBagInterface $flashBag
+    )
+    {
+        $this->translator = $translator;
+        $this->profitService = $profitService;
+        $this->flashBag = $flashBag;
+
+        parent::__construct($em, $dispatcher);
+    }
 
     /**
      * @return string
@@ -27,6 +61,70 @@ class ProductService extends BaseService
     public function getAll()
     {
         return $this->getResult($this->repository->createAll());
+    }
+
+    public function buyProduct()
+    {
+
+    }
+
+    /**
+     * @param int   $sellCount
+     * @param float $sellPrice
+     *
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
+     */
+    public function sellProduct(
+        int $sellCount,
+        float $sellPrice
+    ): bool
+    {
+        $products = $this->getAll();
+        $productCount = 0;
+        $saleValue = 0;
+
+        for($a = 0; $a < count($products); $a++) {
+            $productCount += $products[$a]->getCount();
+        }
+
+        if($sellCount > $productCount) {
+            $this->flashBag->add('error', $this->translator->trans('product.not_enough_products'));
+            return false;
+        }
+        else {
+
+            for($b = 0; $b < count($products); $b++) {
+                $currentProduct = $products[$b];
+
+                if($currentProduct->getCount() >= $sellCount) {
+                    $saleValue += $sellCount * $sellPrice;
+                    $currentProduct->setCount($currentProduct->getCount() - $sellCount);
+
+                    if($currentProduct->getCount() > 0) {
+                        $this->update($currentProduct);
+                    }
+                    else {
+                        $this->remove($currentProduct);
+                    }
+
+                    $profit = new Profit();
+                    $profit->setProfit($saleValue);
+                    $this->profitService->create($profit);
+
+                    $this->flashBag->add('notice', $this->translator->trans('product.sold'));
+                    return true;
+                }
+                else {
+                    $saleValue += $currentProduct->getCount() * ($sellPrice - $currentProduct->getPrice());
+                    $sellCount -= $currentProduct->getCount();
+                    $this->remove($currentProduct);
+                }
+            }
+        }
+
+        return true;
     }
 
 }

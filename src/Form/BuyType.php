@@ -10,11 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
 
 /**
  * Class ProductType
  */
-class ProductType extends AbstractType
+class BuyType extends AbstractType
 {
 
     /**
@@ -36,19 +37,27 @@ class ProductType extends AbstractType
                     ])
                 ]
             ])
-            ->add('price', TextType::class, [
-                'label' => 'product.price',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'generic.not_blank'
-                    ])
-                ]
-            ])
             ->add('count', TextType::class, [
                 'label' => 'product.count',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'generic.not_blank'
+                    ]),
+                    new Type([
+                        'type' => 'numeric',
+                        'message' => 'generic.numeric'
+                    ])
+                ]
+            ])
+            ->add('price', TextType::class, [
+                'label' => 'product.price',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'generic.not_blank'
+                    ]),
+                    new Type([
+                        'type' => 'numeric',
+                        'message' => 'generic.numeric'
                     ])
                 ]
             ])

@@ -1,2 +1,4 @@
 generic:
   not_blank: This field must be filled!
+  numeric: This field must be numeric!
+  integer: This field must be integer!

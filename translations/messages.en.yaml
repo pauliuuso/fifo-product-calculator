@@ -1,9 +1,17 @@
 home:
   title: FIFO calculator
   purchase_price: Purchase price
+  sell_products: Sell products
+  buy_products: Buy products
+  total_profit: Total profit
+  back_to_home: Back to home
 
 product:
   title: Product title
   price: Price
   count: Quantity
   bought: Successfully bought!
+  sold: Successfully sold!
+  sell_price: Sell price
+  sell_count: Sell count
+  not_enough_products: Not enough products
